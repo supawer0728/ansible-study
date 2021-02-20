@@ -1,0 +1,34 @@
+- name: create log directory
+  become: yes
+  file: path={{ app_log_directory }} state=directory
+  
+- name: create directory
+  file: path={{ deploy_directory }} state=directory
+
+- name: copy demo.jar
+  become: yes
+  copy: 
+    src: "files/{{ application_name }}.jar"
+    dest: "{{ deploy_directory }}"
+    group: root
+    owner: root
+    mode: 500
+
+- name: copy demo.service
+  become: yes
+  template: src=files/{{ application_name }}.service.j2 dest=/etc/systemd/system/{{ application_name }}.service
+
+- name: enable demo.jar
+  become: yes
+  command: "systemctl enable {{ application_name }}.service"
+  
+- name: restart app
+  become: yes
+  service: name={{ application_name }} state=restarted
+
+- name: wait for app startup
+  become: yes
+  wait_for:
+    path: "{{ app_log_directory }}/{{ app_log_name }}"
+    search_regex: Started DemoApplication
+    timeout: 300

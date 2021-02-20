@@ -1,0 +1,11 @@
+- name: application server initialization
+  hosts: "{{ phase }}"
+  vars_files:
+    - ../group_vars/common.yml
+    - ../group_vars/{{ application_name }}/{{ phase }}.yml
+  roles:
+    - role: "infra/java"
+      task: install
+    - role: "infra/nginx"
+      task: install
+  

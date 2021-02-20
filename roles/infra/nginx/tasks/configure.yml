@@ -1,0 +1,14 @@
+- name: copy nginx.conf
+  become: yes
+  template:
+    src: "files/{{ nginx_conf_path | basename }}.j2"
+    dest: "{{ nginx_conf_path }}"
+  notify: restart nginx
+    
+- name: copy index.html
+  become: yes
+  template:
+    src: files/index.html.j2
+    dest: /usr/share/nginx/html/index.html
+  notify: restart nginx
+      

@@ -1,0 +1,22 @@
+app_log_directory: "/var/log/{{ application_name }}"
+app_log_name: "{{ application_name}}.log"
+app_pid_path: "/var/run/{{ application_name }}.pid"
+app_path: "{{ deploy_directory }}/{{ application_name }}.jar"
+
+nginx_server_name: localhost
+
+java_opt: >
+  -server
+  -Xms64m
+  -Xmx256m
+  -Dsun.jnu.encoding=UTF-8
+  -Dfile.encoding=UTF-8
+  -Dspring.profiles.active={{ phase }},file-logging
+  -Dspring.pid.file={{ app_pid_path }}
+  -Dlogging.level.root=info
+  -Dlogging.file.path={{ app_log_directory }}
+  -Dlogging.file.name={{ app_log_name }}
+  -Dlogging.logback.rollingpolicy.file-name-pattern={{ application_name }}.%d{yyyy-MM-dd}.gz
+  -Dlogging.logback.rollingpolicy.max-file-size=100GB
+  -Dlogging.logback.rollingpolicy.max-history=15
+  -Dlogging.logback.rollingpolicy.total-size-cap=50GB

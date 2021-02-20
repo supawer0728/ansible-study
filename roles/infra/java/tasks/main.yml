@@ -1,0 +1,9 @@
+- name: install java
+  become: yes
+  yum: name=java-11-openjdk
+
+- name: copy java.security
+  become: yes
+  copy:
+    src: files/java.security
+    dest: /etc/alternatives/jre/conf/security/java.security

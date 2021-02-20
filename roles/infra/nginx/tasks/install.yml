@@ -1,0 +1,19 @@
+- name: install yum-utils
+  become: yes
+  yum: name=yum-utils
+  
+- name: copy nginx.repo
+  become: yes
+  copy:
+    src: files/nginx.repo
+    dest: /etc/yum.repos.d/nginx.repo
+
+- name: install nginx
+  become: yes
+  yum: name=nginx-1.18.0-2.el7.ngx
+  
+- name: SELinux setting
+  become: yes
+  command: setsebool -P httpd_can_network_connect 1
+  
+- include: configure.yml

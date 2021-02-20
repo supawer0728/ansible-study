@@ -1,0 +1,12 @@
+[Unit]
+Description={{ application_name }}
+After=syslog.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/java {{ java_opt }} -Dserver.port=8080 -jar {{ app_path }}
+SuccessExitStatus=143
+PIDFile={{ app_pid_path }}
+
+[Install]
+WantedBy=multi-user.target
